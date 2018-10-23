@@ -51,7 +51,7 @@ class LyricalForm(QDialog):
             artistname = song_name[0].strip()
             trackname = song_name[1].strip()
             url = 'https://api.genius.com/search'
-            mytoken = 'l7dtwHpS97hNisL-uQCtmahwQ6mdCgEs_Xt-8-wuzGm5Wfw8GqaZzd_EESF7_Y9R'
+            mytoken = "INSERT YOUR OWN TOKEN"
             header = {'Authorization': 'Bearer ' + mytoken}
             data = {'q': trackname + ' ' + artistname}
             response = requests.get(url, data=data, headers=header)

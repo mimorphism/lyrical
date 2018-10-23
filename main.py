@@ -45,25 +45,29 @@ class LyricalForm(QDialog):
 
 
     def getSongInfo(self, songname):
-        song_info = None
-        song_name = songname.split('-')
-        artistname = song_name[0].strip()
-        trackname = song_name[1].strip()
-        url = 'https://api.genius.com/search'
-        mytoken = 'l7dtwHpS97hNisL-uQCtmahwQ6mdCgEs_Xt-8-wuzGm5Wfw8GqaZzd_EESF7_Y9R'
-        header = {'Authorization': 'Bearer ' + mytoken}
-        data = {'q': trackname + ' ' + artistname}
-        response = requests.get(url, data=data, headers=header)
-        response = response.json()
+        try:
+            song_info = None
+            song_name = songname.split('-')
+            artistname = song_name[0].strip()
+            trackname = song_name[1].strip()
+            url = 'https://api.genius.com/search'
+            mytoken = 'l7dtwHpS97hNisL-uQCtmahwQ6mdCgEs_Xt-8-wuzGm5Wfw8GqaZzd_EESF7_Y9R'
+            header = {'Authorization': 'Bearer ' + mytoken}
+            data = {'q': trackname + ' ' + artistname}
+            response = requests.get(url, data=data, headers=header)
+            response = response.json()
+            for match in response['response']['hits']:
+                if artistname.lower() in match['result']['primary_artist']['name'].lower():
+                    song_info = match
+                    break
+                else:
+                    break
+            return song_info
+        except IndexError as e:
+            QMessageBox.critical(self, "Error",
+                                 "Error getting the lyrics for the song! Maybe an ad is playing...")
 
 
-        for match in response['response']['hits']:
-            if artistname.lower() in match['result']['primary_artist']['name'].lower():
-                song_info = match
-                break
-            else:
-                break
-        return song_info
 
 
     def getThemLyrics(self, song_info):

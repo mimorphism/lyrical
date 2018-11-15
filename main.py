@@ -15,7 +15,7 @@ class LyricalForm(QDialog):
         self.ui.setupUi(self)
         self.ui.btnGetSpotHandle.clicked.connect(self.saveSpotifyHandle)
         self.ui.btnFetchLyrics.clicked.connect(self.run_them_all)
-        self.spotify_window_handle = self.getSpotifyWindowHandle()
+
 
     def saveSpotifyHandle(self):
         try:
@@ -26,17 +26,18 @@ class LyricalForm(QDialog):
                 with open("spotifyhandle/spothandle.pickle", "wb") as f:
                     pickle.dump(spotifyhandle, f)
                 print("Spotify handle successfully saved")
-
+                self.spotify_window_handle = pickle.load(open("spotifyhandle/spothandle.pickle", "rb"))
+                self.ui.lblSpotifyHandle.setText("Spotify handle : {}".format(self.spotify_window_handle))
         except Exception as e:
             print(e)
 
 
 
-    def getSpotifyWindowHandle(self):
-        # test.saveSpotifyHandle()
-        spotify_window_handle = pickle.load(open("spotifyhandle/spothandle.pickle", "rb"))
-        self.ui.lblSpotifyHandle.setText("Spotify handle : {}".format(spotify_window_handle))
-        return spotify_window_handle
+    # def getSpotifyWindowHandle(self):
+    #     # test.saveSpotifyHandle()
+    #     spotify_window_handle = pickle.load(open("spotifyhandle/spothandle.pickle", "rb"))
+    #     self.ui.lblSpotifyHandle.setText("Spotify handle : {}".format(spotify_window_handle))
+    #     return spotify_window_handle
 
 
     def getSongTitle(self, spotify_window_handle):
@@ -51,7 +52,7 @@ class LyricalForm(QDialog):
             artistname = song_name[0].strip()
             trackname = song_name[1].strip()
             url = 'https://api.genius.com/search'
-            mytoken = "INSERT YOUR OWN TOKEN"
+            mytoken = 'l7dtwHpS97hNisL-uQCtmahwQ6mdCgEs_Xt-8-wuzGm5Wfw8GqaZzd_EESF7_Y9R'
             header = {'Authorization': 'Bearer ' + mytoken}
             data = {'q': trackname + ' ' + artistname}
             response = requests.get(url, data=data, headers=header)
